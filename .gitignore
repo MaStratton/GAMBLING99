@@ -1,4 +1,4 @@
 .env/
 
-UserService/.bin/
+UserService/bin/
 UserService/obj/
