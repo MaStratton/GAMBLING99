@@ -14,7 +14,13 @@ public class UserServiceDBContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(u => u.UserId);
+            entity.HasIndex(u => u.Email)
+                .IsUnique();
+            entity.Property(u => u.Password);
+        });
     }
 
 }

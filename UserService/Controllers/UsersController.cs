@@ -3,9 +3,13 @@ namespace UserService;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
+using System.Text;
+using System.Text.RegularExpressions;
 
 
-[Route("api/[controller]")]
+[Route("User")]
 [ApiController]
 public class UsersController : ControllerBase
 {
@@ -24,9 +28,8 @@ public class UsersController : ControllerBase
     {
         try
         {
-            //User UserInDB = await _dbContext.Users.firstordefaultasync(u -> u.Email == userDTO.Email);
-            User userInDB = null;
-            if (userInDB != null)
+            bool userInDB = await _dbContext.Users.AnyAsync(u => u.Email == userDTO.Email);
+            if (userInDB)
             {
                 return Ok(new {
                     Success = false,
@@ -34,8 +37,17 @@ public class UsersController : ControllerBase
                 });
             }
 
+            String regex = "^((?!\\.)[\\w\\-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$";
+
             User user = _mapper.Map<User>(userDTO);
+
+            if (!new Regex(regex).IsMatch(user.Email)){
+                return StatusCode(400, "Invalid Email");
+            }
+
             user.Password = hashPass(user.Password);
+            user.Role = "USER";
+
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
@@ -45,23 +57,29 @@ public class UsersController : ControllerBase
         } 
         catch (Exception e)
         {
+            Console.WriteLine(e);
             return StatusCode(500, "Internal Server Error");
         }
     }
 
+    [HttpGet("home")]
+    public async Task<IActionResult> GetHome()
+    {
+        var image = System.IO.File.OpenRead("./Properties/House.png");
+        return File(image, "image/png");
+    }
+
     public String hashPass(String pass)
     {
-        byte[] salt = GetBytes(Environment.GetEnvironmentVariable("PASSWORD_SALT"));
-
-        string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-            password: pass,
-            salt: salt,
-            prf: KeyDerivationPrf.HMACSHA512,
-            iterationCount: 500,
-            numBytesRequested: 64));
-
-        Console.WriteLine(hashed);
-        return hashed;
-        
+        byte[] passByte = Encoding.UTF8.GetBytes(pass);
+        byte[] salt = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("PASSWORD_SALT"));
+        byte[] saltedPass = new byte[passByte.Length + salt.Length];
+        passByte.CopyTo(saltedPass, 0);
+        salt.CopyTo(saltedPass, passByte.Length);
+        using (SHA512 shaM = SHA512.Create())
+        {
+        byte[] hash = shaM.ComputeHash(saltedPass);
+        return BitConverter.ToString(hash).Replace("-", "").ToLower();    
+        }
     }
 }
