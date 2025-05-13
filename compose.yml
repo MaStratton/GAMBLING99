@@ -11,6 +11,19 @@ services:
       - 8080:8080
     networks:
       - gambling99
+  auth-service:
+    image: gambling99-authservice:latest
+    container_name: GAMBLING99AuthServiceAPI
+    build:
+      context: ./AuthService
+      dockerfile: Dockerfile
+    hostname: GAMBLING99UserServiceAPI
+    env_file: ./.env/AuthService.env
+    ports:
+      - 8081:8080
+    networks:
+      - gambling99
+
 
   mysql:
     image: mysql:8.0.34
