@@ -1,4 +1,17 @@
 services:
+  user-service:
+    image: gambling99-userservice:latest
+    container_name: GAMBLING99UserServiceAPI
+    build:
+      context: ./UserService
+      dockerfile: Dockerfile
+    hostname: GAMBLING99UserServiceAPI
+    env_file: ./.env/UserService.env
+    ports:
+      - 8080:8080
+    networks:
+      - gambling99
+
   mysql:
     image: mysql:8.0.34
     container_name: GAMBLING99MySql
