@@ -36,3 +36,11 @@
 /mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/bin/Debug/net9.0/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 /mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/bin/Debug/net9.0/Newtonsoft.Json.dll
 /mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/bin/Debug/net9.0/Newtonsoft.Json.Bson.dll
+/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/bin/Debug/net9.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/bin/Debug/net9.0/Microsoft.IdentityModel.Abstractions.dll
+/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/bin/Debug/net9.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/bin/Debug/net9.0/Microsoft.IdentityModel.Logging.dll
+/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/bin/Debug/net9.0/Microsoft.IdentityModel.Protocols.dll
+/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/bin/Debug/net9.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/bin/Debug/net9.0/Microsoft.IdentityModel.Tokens.dll
+/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/bin/Debug/net9.0/System.IdentityModel.Tokens.Jwt.dll
