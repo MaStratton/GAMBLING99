@@ -11,6 +11,7 @@ services:
       - 8080:8080
     networks:
       - gambling99
+
   auth-service:
     image: gambling99-authservice:latest
     container_name: GAMBLING99AuthServiceAPI
@@ -24,7 +25,6 @@ services:
     networks:
       - gambling99
 
-
   mysql:
     image: mysql:8.0.34
     container_name: GAMBLING99MySql
@@ -37,10 +37,26 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - 6379:6379
+    networks:
+      - gambling99
 
+  lobby_service:
+    container_name: lobby_service
+    build:
+      context: ./LobbyService
+    ports:
+      - 8082:8080
+    networks:
+      - gambling99
 
 networks:
   gambling99:
     name: gambling99
+
 volumes:
   mysql_data:
