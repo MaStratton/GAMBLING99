@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/GameService/GameService.csproj": {}
+    "/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/GameService.csproj": {}
   },
   "projects": {
-    "/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/GameService/GameService.csproj": {
+    "/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/GameService.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/GameService/GameService.csproj",
+        "projectUniqueName": "/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/GameService.csproj",
         "projectName": "GameService",
-        "projectPath": "/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/GameService/GameService.csproj",
+        "projectPath": "/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/GameService.csproj",
         "packagesPath": "/home/matthew/.nuget/packages/",
-        "outputPath": "/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/GameService/obj/",
+        "outputPath": "/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/matthew/.nuget/NuGet/NuGet.Config"
@@ -44,9 +44,17 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[9.0.4, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.3, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
             }
           },
           "imports": [

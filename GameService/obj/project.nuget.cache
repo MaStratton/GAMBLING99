@@ -1,11 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "cL6wWI3igEM=",
+  "dgSpecHash": "gruC2IEXRWg=",
   "success": true,
-  "projectFilePath": "/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/GameService/GameService.csproj",
+  "projectFilePath": "/mnt/c/Neumont/YearTwo/QuarterThree/GAMBLING99/GameService/GameService.csproj",
   "expectedPackageFiles": [
+    "/home/matthew/.nuget/packages/microsoft.aspnetcore.jsonpatch/9.0.4/microsoft.aspnetcore.jsonpatch.9.0.4.nupkg.sha512",
+    "/home/matthew/.nuget/packages/microsoft.aspnetcore.mvc.newtonsoftjson/9.0.4/microsoft.aspnetcore.mvc.newtonsoftjson.9.0.4.nupkg.sha512",
     "/home/matthew/.nuget/packages/microsoft.aspnetcore.openapi/9.0.3/microsoft.aspnetcore.openapi.9.0.3.nupkg.sha512",
-    "/home/matthew/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512"
+    "/home/matthew/.nuget/packages/microsoft.csharp/4.7.0/microsoft.csharp.4.7.0.nupkg.sha512",
+    "/home/matthew/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512",
+    "/home/matthew/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512",
+    "/home/matthew/.nuget/packages/newtonsoft.json.bson/1.0.2/newtonsoft.json.bson.1.0.2.nupkg.sha512"
   ],
   "logs": []
 }
