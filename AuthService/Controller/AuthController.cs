@@ -29,7 +29,6 @@ public class AuthController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> getJWT([FromBody] UserDTO userDTO)
     {
-        Console.WriteLine(" HERE ", userDTO);
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == userDTO.Email);
         
         if (user == null)
