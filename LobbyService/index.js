@@ -110,6 +110,10 @@ app.patch('/lobby/:user_id', auth, async (req, res) => {
     res.json({ balance: new_balance });
 });
 
+app.get('/lobby/home', (req, res) => {
+  res.sendFile(__dirname + "/House.png");
+})
+
 app.listen(PORT, () => {
     console.log(`lobby_service running on http://lobby_service:${PORT}`);
 });
