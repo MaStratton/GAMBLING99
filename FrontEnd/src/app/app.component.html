@@ -1,0 +1,16 @@
+
+<main class="main">
+  <div class="content">
+    <header>
+      <nav>
+          <a [routerLink]="['/']">Home</a>
+          <a *ngIf="!loggedIn" [routerLink]="['/login']">Login</a>
+          <a *ngIf="!loggedIn" [routerLink]="['/signup']">Sign Up</a>
+          <a *ngIf="loggedIn" (click)="logOut()" [routerLink]="['/']">Log Out</a>
+          <a *ngIf="loggedIn" [routerLink]="['/game']">Game</a>
+      </nav>
+    </header>
+  </div>
+</main>
+
+<router-outlet />
