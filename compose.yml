@@ -2,7 +2,7 @@ services:
   user-service:
     image: userservice:latest
     container_name: UserServiceAPI
-    hostname: GAMBLING99UserServiceAPI
+    hostname: UserServiceAPI
     build:
       context: ./UserService
       dockerfile: Dockerfile
