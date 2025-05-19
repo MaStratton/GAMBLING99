@@ -28,22 +28,28 @@ public class UsersController : ControllerBase
     {
         try
         {
-            bool userInDB = await _dbContext.Users.AnyAsync(u => u.Email == userDTO.Email);
-            if (userInDB)
-            {
-                return Ok(new {
-                    Success = false,
-                    Message = "User Exists With Given Email"
-                });
-            }
 
             String regex = "^((?!\\.)[\\w\\-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$";
 
-            User user = _mapper.Map<User>(userDTO);
+            if (!new Regex(regex).IsMatch(userDTO.Email))
+            {
 
-            if (!new Regex(regex).IsMatch(user.Email)){
                 return StatusCode(400, "Invalid Email");
             }
+
+                bool userInDB = await _dbContext.Users.AnyAsync(u => u.Email == userDTO.Email);
+                if (userInDB)
+                {
+                    return Ok(new
+                    {
+                        Success = false,
+                        Message = "User Exists With Given Email"
+                    });
+                }
+
+
+                User user = _mapper.Map<User>(userDTO);
+
 
             user.Password = hashPass(user.Password);
             user.Role = "USER";

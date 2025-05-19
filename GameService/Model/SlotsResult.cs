@@ -1,6 +1,6 @@
 ﻿namespace GameService;
 
-public class SlotsMachine
+public class SlotsResult
 {
 
 }
