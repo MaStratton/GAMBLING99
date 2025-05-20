@@ -1,0 +1,181 @@
+openapi: 3.0.3
+info:
+  title: Gambling 99
+  version: 0.0.9
+  description: Microservice API that runs a web based gambling royal game
+
+servers:
+  - url: http://UserServiceAPI:8080
+    description: Handles the users creation and functionality
+  - url: http://AuthServiceAPI:8080
+    description: Handles authentication and its functionality
+  - url: http://LobbyServiceAPI:8080
+    description: Handles the lobby creation and functionality
+  - url: MySql://MySql:3306
+    description: The server for the mysql database
+  - url: redis://redis:6379
+    description: the server for the redis database
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        UserId:
+          type: integer
+        Usernames:
+          type: string
+        Password:
+          type: string
+        Email:
+          type: string
+        Role:
+          type: string
+    UserForm:
+      type: object
+      properties:
+        Username:
+          type: string
+        Email:
+          type: string 
+        Password:
+          type: string 
+        
+
+tags:
+  - name: User
+    description: Operations related to user management
+  - name: Auth
+    description: Login, logout, and token operations
+  - name: Game
+    description: Game management and operations
+  - name: Lobby
+    description: Lobby management
+
+
+paths:
+  # ------- User Service ------- #
+  /user:
+    get:
+      tags: [User]
+      summary: Get all users
+      security:
+        - JWT: []
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                item:
+                  $ref: '#/components/schemas/User'
+        '404':
+          description: Users not found
+        '500':
+          description: Server error
+
+    post:
+      tags: [User]
+      summary: Create a new user
+      requestBody:
+        description: intakes a password, username, and email to make a user
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserForm"
+
+    
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+        '403':
+          description: Forbidden operation
+        '406':
+          description: Missing required fields
+        '500':
+          description: Server error
+          
+  /User/home:
+    get:
+      tags: [User]
+      summary: Gets house
+      responses:
+        '200':
+          description: House
+          content:
+            'image/png': 
+              schema:
+                type: object
+                format: binary
+        '404':
+          description: House not found
+        '500':
+          description: Server error
+
+  # ------- Auth Service ------- #
+  /Auth:
+    post:
+      tags: [Auth]
+      summary: Takes in username, email and password, returns JWT token
+      requestBody:
+        description: intakes a password, username, and email to make a user
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserForm"
+      responses:
+        '201':
+          description: JWT created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  JWT:
+                    type: string
+        '403':
+          description: Forbidden operation
+        '406':
+          description: Missing required fields
+        '500':
+          description: Server error
+
+  /Auth/home:          
+    get:
+      tags: [Auth]
+      summary: Gets house
+      responses:
+        '200':
+          description: House
+          content:
+            'image/png': 
+              schema:
+                type: object
+                format: binary
+        '404':
+          description: House not found
+        '500':
+          description: Server error
+  
+  # ------- Game service ------- #
+  /Game/home:
+    get:
+      tags: [Game]
+      summary: Gets house
+      responses:
+        '200':
+          description: House
+          content:
+            'image/png': 
+              schema:
+                type: object
+                format: binary
+        '404':
+          description: House not found
+        '500':
+          description: Server error
