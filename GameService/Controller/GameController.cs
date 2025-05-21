@@ -25,6 +25,8 @@ public class GameController : ControllerBase
             return StatusCode(401, "Bas JWT Token: Missing UserId");
         }
         Console.WriteLine(userId);
+
+        Slots.Pull(10);
         return StatusCode(200, "OK");
 
     }

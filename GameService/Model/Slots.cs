@@ -53,12 +53,22 @@ private static String[] ReelThree = new String[]
     public static String[] Spin()
     {
         Random r = new Random();
-        return new String[] { ReelOne[r.Next(ReelOne.Length)], ReelTwo[r.Next(ReelTwo.Length)], ReelThree[r.Next(ReelThree.Length)] };
+        //return new String[] { ReelOne[r.Next(ReelOne.Length)], ReelTwo[r.Next(ReelTwo.Length)], ReelThree[r.Next(ReelThree.Length)] };
+        return new String[] { "h", "h", "h" };
     }
 
-    public static SlotsResult Pull()
+    public static SlotsResult Pull(int bet)
     {
-        //TODO Write logic behind calculating payout    
+        //TODO Get LobbyService/userId/lobbyId to get user balance
+        int balance = 100;
+        String[] result = Spin();
+        Console.WriteLine("FUCK");
+        if (result[0].Equals(result[1]).Equals(result[2]))
+        {
+            Console.WriteLine("HIT");
+        }
+        
+        
         return null;
     }
 }
