@@ -20,13 +20,15 @@ public class GameController : ControllerBase
         var token = handler.ReadJwtToken(authorization);
 
         var userId = token.Claims.FirstOrDefault(t => t.Type == "UserId")?.Value;
+
         if (userId == null)
         {
             return StatusCode(401, "Bas JWT Token: Missing UserId");
         }
-        Console.WriteLine(userId);
+        
+        int bet = 10;
 
-        Slots.Pull(10);
+        String[] results = Slots.Pull(ref bet);
         return StatusCode(200, "OK");
 
     }
