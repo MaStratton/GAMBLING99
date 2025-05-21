@@ -29,7 +29,7 @@ public class GameController : ControllerBase
         int bet = 10;
 
         String[] results = Slots.Pull(ref bet);
-        return StatusCode(200, "OK");
+        return StatusCode(200, results);
 
     }
 

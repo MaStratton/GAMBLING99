@@ -53,8 +53,7 @@ private static String[] ReelThree = new String[]
     public static String[] Spin()
     {
         Random r = new Random();
-        //return new String[] { ReelOne[r.Next(ReelOne.Length)], ReelTwo[r.Next(ReelTwo.Length)], ReelThree[r.Next(ReelThree.Length)] };
-        return new String[] { "h", "h", "h" };
+        return new String[] { ReelOne[r.Next(ReelOne.Length)], ReelTwo[r.Next(ReelTwo.Length)], ReelThree[r.Next(ReelThree.Length)] };
     }
 
     public static String[] Pull(ref int bet)
