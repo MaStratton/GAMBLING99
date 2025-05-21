@@ -62,7 +62,6 @@ private static String[] ReelThree = new String[]
         //TODO Get LobbyService/userId/lobbyId to get user balance
         int balance = 100;
         String[] result = Spin();
-        Console.WriteLine("FUCK");
         if (result[0].Equals(result[1]).Equals(result[2]))
         {
             Console.WriteLine("HIT");
