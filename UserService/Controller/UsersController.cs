@@ -37,13 +37,13 @@ public class UsersController : ControllerBase
                 return StatusCode(400, "Invalid Email");
             }
 
-                bool userInDB = await _dbContext.Users.AnyAsync(u => u.Email == userDTO.Email);
+                bool userInDB = await _dbContext.Users.AnyAsync(u => u.Email == userDTO.Email || u.Username == userDTO.Username);
                 if (userInDB)
                 {
                     return Ok(new
                     {
                         Success = false,
-                        Message = "User Exists With Given Email"
+                        Message = "Username or Email Exists"
                     });
                 }
 
