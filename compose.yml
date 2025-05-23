@@ -47,8 +47,8 @@ services:
 
   lobby-service:
     image: lobbyservice:latest
-    container_name: lobby_service
-    hostname: lobby_service
+    container_name: LobbyServiceAPI
+    hostname: LobbyServiceAPI
     build:
       context: ./LobbyService
     ports:
