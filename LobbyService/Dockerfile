@@ -8,7 +8,5 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 8082
-
 # Start the application
 CMD ["node", "index.js"]

@@ -21,27 +21,46 @@ function auth(req, res, next) {
     next();
 }
 
-function adminAuth(req, res, next) {
+function admin_auth(req, res, next) {
     if (req.headers.authorization !== 'admin') {
         return res.status(403).json({ error: 'Admin only' });
     }
     next();
 }
 
-// GET /lobby/leaderboard
-app.get('/lobby/leaderboard', async (req, res) => {
+// Redis-backed functions
+async function addUserToLobby(userId, lobbyId, money) {
+    await client.sAdd(`lobby:${lobbyId}:users`, userId);
+    await client.hSet(`lobby:${lobbyId}:user_money`, userId, money);
+    await client.set(`user:${userId}:lobby`, lobbyId);
+}
+
+async function getUsersWithMoneyInLobby(lobbyId) {
+    const userIds = await client.sMembers(`lobby:${lobbyId}:users`);
+    const moneyMap = await client.hGetAll(`lobby:${lobbyId}:user_money`);
+    return userIds.map(userId => ({ user_id: userId, money: parseFloat(moneyMap[userId] || 0) }));
+}
+
+async function getUserMoney(userId) {
+    const lobbyId = await client.get(`user:${userId}:lobby`);
+    if (!lobbyId) return null;
+    const money = await client.hGet(`lobby:${lobbyId}:user_money`, userId);
+    return { lobby_id: lobbyId, money: parseFloat(money || 0) };
+}
+
+async function getUserLobby(userId) {
+    return await client.get(`user:${userId}:lobby`);
+}
+
+// ROUTES
+
+// GET /lobby/:lobby_id/leaderboard
+app.get('/lobby/:lobby_id/leaderboard', async (req, res) => {
+    const { lobby_id } = req.params;
     try {
-        const keys = await client.keys('lobby:user:*');
-        const users = [];
-
-        for (const key of keys) {
-            const data = JSON.parse(await client.get(key));
-            users.push({ user_id: data.user_id, balance: data.balance });
-        }
-
-        users.sort((a, b) => b.balance - a.balance);
+        const users = await getUsersWithMoneyInLobby(lobby_id);
+        users.sort((a, b) => b.money - a.money);
         const leaderboard = users.map((u, i) => ({ position: i + 1, ...u }));
-
         res.json(leaderboard);
     } catch (err) {
         res.status(500).json({ error: 'Failed to load leaderboard' });
@@ -50,69 +69,83 @@ app.get('/lobby/leaderboard', async (req, res) => {
 
 // POST /lobby/join
 app.post('/lobby/join', auth, async (req, res) => {
-    const { user_id } = req.body;
-    if (!user_id) return res.json({ error: 'Missing user_id' });
+    const { user_id, lobby_id, initial_money } = req.body;
+    if (!user_id || !lobby_id || typeof initial_money !== 'number') {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
 
-    const key = `lobby:user:${user_id}`;
-    const exists = await client.exists(key);
-    if (exists) return res.json({ error: 'Already joined' });
+    const currentLobby = await getUserLobby(user_id);
+    if (currentLobby) return res.status(400).json({ error: 'Already in a lobby' });
 
-    await client.set(key, JSON.stringify({ user_id, balance: 0 }));
-    res.json({ message: 'joined' });
+    await addUserToLobby(user_id, lobby_id, initial_money);
+    res.json({ message: 'User added to lobby' });
 });
 
 // POST /lobby/leave
 app.post('/lobby/leave', auth, async (req, res) => {
     const { user_id } = req.body;
-    if (!user_id) return res.json({ error: 'Missing user_id' });
+    if (!user_id) return res.status(400).json({ error: 'Missing user_id' });
 
-    const key = `lobby:user:${user_id}`;
-    const deleted = await client.del(key);
-    if (!deleted) return res.json({ error: 'Not found' });
+    const lobbyId = await getUserLobby(user_id);
+    if (!lobbyId) return res.status(400).json({ error: 'User not in a lobby' });
 
-    res.json({ message: 'left' });
+    await client.sRem(`lobby:${lobbyId}:users`, user_id);
+    await client.hDel(`lobby:${lobbyId}:user_money`, user_id);
+    await client.del(`user:${user_id}:lobby`);
+
+    res.json({ message: 'User removed from lobby' });
 });
 
 // POST /lobby/create
-app.post('/lobby/create', adminAuth, async (req, res) => {
+app.post('/lobby/create', admin_auth, async (req, res) => {
     const { name, host } = req.body;
-    if (!name || !host) return res.json({ error: 'Missing name or host' });
+    if (!name || !host) return res.status(400).json({ error: 'Missing name or host' });
 
-    const id = Date.now();
-    const key = `lobby:${id}`;
+    const id = Date.now().toString();
+    const key = `lobby:${id}:meta`;
     await client.set(key, JSON.stringify({ id, name, host }));
+
     res.json({ lobby_id: id });
 });
 
 // DELETE /lobby/:id
-app.delete('/lobby/:id', adminAuth, async (req, res) => {
-    const key = `lobby:${req.params.id}`;
-    const deleted = await client.del(key);
-    if (!deleted) return res.json({ error: 'Lobby not found' });
+app.delete('/lobby/:id', admin_auth, async (req, res) => {
+    const lobbyId = req.params.id;
+    const metaKey = `lobby:${lobbyId}:meta`;
+    const usersKey = `lobby:${lobbyId}:users`;
+    const moneyKey = `lobby:${lobbyId}:user_money`;
 
-    res.json({ message: 'success' });
+    await client.del(metaKey);
+    await client.del(usersKey);
+    await client.del(moneyKey);
+
+    res.json({ message: 'Lobby deleted' });
 });
 
 // PATCH /lobby/:user_id
 app.patch('/lobby/:user_id', auth, async (req, res) => {
     const { user_id } = req.params;
     const { new_balance } = req.body;
-    if (typeof new_balance !== 'number') return res.json({ error: 'Invalid balance' });
+    if (typeof new_balance !== 'number') return res.status(400).json({ error: 'Invalid balance' });
 
-    const key = `lobby:user:${user_id}`;
-    const data = await client.get(key);
-    if (!data) return res.json({ error: 'User not found' });
+    const lobbyId = await getUserLobby(user_id);
+    if (!lobbyId) return res.status(404).json({ error: 'User not in a lobby' });
 
-    const user = JSON.parse(data);
-    user.balance = new_balance;
-    await client.set(key, JSON.stringify(user));
+    await client.hSet(`lobby:${lobbyId}:user_money`, user_id, new_balance);
+    res.json({ message: 'Balance updated', balance: new_balance });
+});
 
-    res.json({ balance: new_balance });
+// GET /lobby/:user_id/money
+app.get('/lobby/:user_id/money', auth, async (req, res) => {
+    const { user_id } = req.params;
+    const data = await getUserMoney(user_id);
+    if (!data) return res.status(404).json({ error: 'User not in a lobby' });
+    res.json(data);
 });
 
 app.get('/lobby/home', (req, res) => {
-  res.sendFile(__dirname + "/House.png");
-})
+    res.sendFile(__dirname + "/house.png");
+});
 
 app.listen(PORT, () => {
     console.log(`lobby_service running on http://lobby_service:${PORT}`);
