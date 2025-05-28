@@ -51,6 +51,7 @@ services:
     hostname: LobbyServiceAPI
     build:
       context: ./LobbyService
+    env_file: ./.env/AuthService.env
     depends_on:
       - redis
     ports:
