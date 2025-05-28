@@ -7,7 +7,8 @@
           <a *ngIf="!loggedIn" [routerLink]="['/login']">Login</a>
           <a *ngIf="!loggedIn" [routerLink]="['/signup']">Sign Up</a>
           <a *ngIf="loggedIn" (click)="logOut()" [routerLink]="['/']">Log Out</a>
-          <a *ngIf="loggedIn" [routerLink]="['/game']">Game</a>
+          <a *ngIf="loggedIn" [routerLink]="['/game']">Game (Temp link)</a>
+          <a [routerLink]="['/lobbies']">Find a Lobby</a>
       </nav>
     </header>
   </div>
