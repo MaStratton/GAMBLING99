@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const redis = require('redis');
+const jwt = require('jsonwebtoken')
 
 const app = express();
 const PORT = 8080;
@@ -18,14 +19,33 @@ function auth(req, res, next) {
     if (!req.headers.authorization) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
-    next();
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_KEY);
+        req.userId = decoded.userId;
+        next();
+    } catch (error) {
+        res.status(401).json({ error: 'Invalid token' });
+
+    }
 }
 
 function admin_auth(req, res, next) {
-    if (req.headers.authorization !== 'admin') {
-        return res.status(403).json({ error: 'Admin only' });
+    if (!req.headers.authorization) {
+        return res.status(401).json({ error: 'Unauthorized' });
     }
-    next();
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_KEY);
+        req.userId = decoded.userId;
+        if (decoded.role != "ADMIN") {
+            next();
+        } else {
+            res.status(401).json({ error: 'Admin only' });
+        }
+    } catch (error) {
+        res.status(401).json({ error: 'Invalid token' });
+    }
 }
 
 // Redis-backed functions
