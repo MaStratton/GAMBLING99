@@ -45,7 +45,8 @@ public class AuthController : ControllerBase
         {
             new(ClaimTypes.Name, user.Username),
             new(ClaimTypes.Email, user.Email),
-            new("UserId", user.UserId.ToString())
+            new(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+            new(ClaimTypes.Role, user.Role)
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")));
