@@ -53,6 +53,7 @@ async function addUserToLobby(userId, lobbyId, money) {
     await client.sAdd(`lobby:${lobbyId}:users`, userId);
     await client.hSet(`lobby:${lobbyId}:user_money`, userId, money);
     await client.set(`user:${userId}:lobby`, lobbyId);
+    await client.sAdd('lobbies', lobbyId);
 }
 
 async function getUsersWithMoneyInLobby(lobbyId) {
@@ -72,7 +73,16 @@ async function getUserLobby(userId) {
     return await client.get(`user:${userId}:lobby`);
 }
 
+async function getAllLobbies() {
+    return await client.sMembers("lobbies");
+}
+
 // ROUTES
+
+// GET /lobby
+app.get('/lobby', async (req, res) => {
+    res.json({ lobbies: getAllLobbies() });
+});
 
 // GET /lobby/:lobby_id/leaderboard
 app.get('/lobby/:lobby_id/leaderboard', async (req, res) => {
