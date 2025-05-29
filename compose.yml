@@ -60,6 +60,19 @@ services:
       - gambling99
 
 
+  nginx:
+    container_name: NginX
+    ports:
+      - 8080:8080
+    depends_on:
+      - auth-service
+      - game-service
+      - lobby-service
+      - user-service
+    build: ./NginX
+    networks:
+      - gambling99
+
   mysql:
     image: mysql:8.0.34
     container_name: MySql
