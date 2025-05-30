@@ -37,10 +37,10 @@ function admin_auth(req, res, next) {
     }
 
     try {
-        var token = req.headers.authorization.split(' ')[1];
+        const token = req.headers.authorization.split(" ")[1];
         const decoded = jwt.verify(token, process.env.JWT_KEY);
         req.userId = decoded.userId;
-        if (decoded.role != "ADMIN") {
+        if (decoded.role === "ADMIN") {
             next();
         } else {
             res.status(401).json({ error: 'Admin only' });
@@ -55,7 +55,6 @@ async function addUserToLobby(userId, lobbyId, money) {
     await client.sAdd(`lobby:${lobbyId}:users`, userId);
     await client.hSet(`lobby:${lobbyId}:user_money`, userId, money);
     await client.set(`user:${userId}:lobby`, lobbyId);
-    await client.sAdd('lobbies', lobbyId);
 }
 
 async function getUsersWithMoneyInLobby(lobbyId) {
@@ -83,7 +82,7 @@ async function getAllLobbies() {
 
 // GET /lobby
 app.get('/lobby', async (req, res) => {
-    res.json({ lobbies: getAllLobbies() });
+    res.json({ lobbies: await getAllLobbies() });
 });
 
 // GET /lobby/:lobby_id/leaderboard
@@ -136,6 +135,7 @@ app.post('/lobby/create', admin_auth, async (req, res) => {
     const id = Date.now().toString();
     const key = `lobby:${id}:meta`;
     await client.set(key, JSON.stringify({ id, name, host }));
+    await client.sAdd('lobbies', id);
 
     res.json({ lobby_id: id });
 });
@@ -150,6 +150,7 @@ app.delete('/lobby/:id', admin_auth, async (req, res) => {
     await client.del(metaKey);
     await client.del(usersKey);
     await client.del(moneyKey);
+    await client.sRem("lobbies", lobbyId);
 
     res.json({ message: 'Lobby deleted' });
 });
