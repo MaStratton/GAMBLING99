@@ -3,19 +3,24 @@ namespace UserService;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 using System.Text.RegularExpressions;
 
 
-[Route("User")]
+[Route("user")]
 [ApiController]
 public class UsersController : ControllerBase
 {
     private readonly UserServiceDBContext _dbContext;
     
     private readonly IMapper _mapper;
+    
+    private const String REGEX_STRING = "^((?!\\.)[\\w\\-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$";
 
     public UsersController(UserServiceDBContext dbContext, IMapper mapper)
     {
@@ -29,26 +34,24 @@ public class UsersController : ControllerBase
         try
         {
 
-            String regex = "^((?!\\.)[\\w\\-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$";
-
-            if (!new Regex(regex).IsMatch(userDTO.Email))
+            if (!new Regex(REGEX_STRING).IsMatch(userDTO.Email))
             {
 
                 return StatusCode(400, "Invalid Email");
             }
 
-                bool userInDB = await _dbContext.Users.AnyAsync(u => u.Email == userDTO.Email || u.Username == userDTO.Username);
-                if (userInDB)
+            bool userInDB = await _dbContext.Users.AnyAsync(u => u.Email == userDTO.Email || u.Username == userDTO.Username);
+            if (userInDB)
+            {
+                return Ok(new
                 {
-                    return Ok(new
-                    {
-                        Success = false,
-                        Message = "Username or Email Exists"
-                    });
-                }
+                    Success = false,
+                    Message = "Username or Email Exists"
+                });
+            }
 
 
-                User user = _mapper.Map<User>(userDTO);
+            User user = _mapper.Map<User>(userDTO);
 
 
             user.Password = hashPass(user.Password);
@@ -64,6 +67,44 @@ public class UsersController : ControllerBase
         catch (Exception e)
         {
             Console.WriteLine(e);
+            return StatusCode(500, "Internal Server Error");
+        }
+    }
+
+    [Authorize(Roles = "ADMIN")]
+    [HttpPost("Admin")]
+    public async Task<IActionResult> CreateAdmin([FromBody] UserDTO userDTO)
+    {
+        try
+        {
+            if (!new Regex(REGEX_STRING).IsMatch(userDTO.Email))
+            {
+                return StatusCode(400, "Invalid Email");
+            }
+
+            bool userInDB = await _dbContext.Users.AnyAsync(u => u.Email == userDTO.Email || u.Username == userDTO.Username);
+            if (userInDB)
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = "Username or Email Exists"
+                });
+            }
+
+            User user = _mapper.Map<User>(userDTO);
+            user.Password = hashPass(user.Password);
+            user.Role = "Admin";
+
+            await _dbContext.Users.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(new { Success = true, Message = "Admin created." });
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e + "\n");
             return StatusCode(500, "Internal Server Error");
         }
     }
