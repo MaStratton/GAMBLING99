@@ -2,13 +2,25 @@
 <main class="main">
   <div class="content">
     <header>
-      <nav>
-          <a [routerLink]="['/']">Home</a>
-          <a *ngIf="!loggedIn" [routerLink]="['/login']">Login</a>
-          <a *ngIf="!loggedIn" [routerLink]="['/signup']">Sign Up</a>
-          <a *ngIf="loggedIn" (click)="logOut()" [routerLink]="['/']">Log Out</a>
-          <a *ngIf="loggedIn" [routerLink]="['/game']">Game (Temp link)</a>
-          <a [routerLink]="['/lobbies']">Find a Lobby</a>
+      <nav ngbNav #nav="ngbNav" [activeId]="route.fragment | async" class="nav-tabs justify-content-center">
+        <ng-container ngbNavItem>
+          <a [routerLink]="['/']" class="text-white me-1" ngbNavLink>Home</a>
+        </ng-container>
+        <ng-container ngbNavItem>
+          <a *ngIf="!loggedIn" [routerLink]="['/login']" class="text-white me-1" ngbNavLink>Login</a>
+        </ng-container>
+        <ng-container ngbNavItem>
+          <a *ngIf="!loggedIn" [routerLink]="['/signup']" class="text-white me-1" ngbNavLink>Sign Up</a>
+        </ng-container>
+        <ng-container ngbNavItem>
+          <a *ngIf="loggedIn" (click)="logOut()" [routerLink]="['/']" class="text-white" ngbNavLink>Log Out</a>
+        </ng-container>
+        <ng-container ngbNavItem>
+          <a *ngIf="loggedIn" [routerLink]="['/game']" class="text-white" ngbNavLink>Game (Temp link)</a>
+        </ng-container>
+        <ng-container ngbNavItem>
+          <a *ngIf="loggedIn" [routerLink]="['/lobbies']" class="text-white" ngbNavLink>Find a Lobby</a>
+        </ng-container>
       </nav>
     </header>
   </div>
