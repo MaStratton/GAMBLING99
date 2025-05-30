@@ -7,14 +7,23 @@ import { Router } from "@angular/router";
   selector: 'app-login',
   imports: [],
   template: `
-    <section>
-      <form>
-        <h1>Please sign in</h1>
+    <section class="container justify-content-center align-items-center min-vh-100" style="width:100%; max-width: 400px;">
+      <form class="form-control-sm mt-5 bg-gradient">
+        <h2>Please sign in</h2>
         <p id="message"></p>
-        <input type="text" placeholder="Username" #username/> <br>
-        <input type="email" placeholder="Email" #email/> <br>
-        <input type="password" placeholder="Password" #password/> <br>
-        <button class="primary" type="button" (click)="attemptLogin(username.value, email.value, password.value)">Login</button>
+        <div class="form-group mb-2">
+          <label>Username</label> <br>
+          <input type="text" class="form-control" placeholder="Username" #username/> <br>
+        </div>
+        <div class="form-group mb-2">
+          <label>Email</label> <br>
+          <input type="email" class="form-control" placeholder="Email" #email/> <br>
+        </div>
+        <div class="form-group mb-2">
+          <label>Password</label> <br>
+          <input type="password" class="form-control mb-2" placeholder="Password" #password/> <br>
+        </div>
+        <button class="btn btn-primary mb2 w-100" type="button" (click)="attemptLogin(username.value, email.value, password.value)">Login</button>
       </form>
     </section>
   `,

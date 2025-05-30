@@ -7,14 +7,28 @@ import {Router} from '@angular/router';
   selector: 'app-signup',
   imports: [CommonModule],
   template: `
-    <section>
-      <form>
-        <h1>Please enter the following to sign up</h1>
-        <p id="message"></p>
-        <input type="text" placeholder="Username" #username/> <br>
-        <input type="email" placeholder="Email" #email/> <br>
-        <input type="password" placeholder="Password" #password/> <br>
-        <button class="primary" type="button" (click)="attemptSignup(username.value, email.value, password.value)">Sign up</button>
+    <section class="container justify-content-center align-items-center min-vh-100" style="width:100%; max-width: 400px;">
+      <form class="form-control-sm mt-5 bg-gradient">
+          <h3>Please enter the following to sign up</h3>
+          <p id="message"></p>
+        <div class="mb-2">
+          <label for="InputUsername">Username</label> <br>
+          <input type="text" class="form-control" placeholder="Username" #username/> <br>
+        </div>
+        <div class="form-group mb-2">
+          <label>Email</label> <br>
+          <input type="email" class="form-control" placeholder="Email" #email/> <br>
+        </div>
+        <div class="form-group mb-2">
+          <label>Password</label> <br>
+          <input type="password" class="form-control" placeholder="Password" #password/> <br>
+        </div>
+        <div class="form-group form-check mb-2">
+          <input type="checkbox" class="form-check-input" id="exampleCheck1">
+          <label class="form-check-label" for="exampleCheck1">Agree to our terms of service</label>
+        </div>
+
+        <button class="btn btn-primary mb2 w-100" type="button" (click)="attemptSignup(username.value, email.value, password.value)">Sign up</button>
       </form>
     </section>
   `,

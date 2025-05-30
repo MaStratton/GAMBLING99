@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {Router, RouterLink, RouterOutlet} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink, RouterOutlet} from '@angular/router';
 import {AppCookieService} from './cookie.service';
+import {NgbNav, NgbNavItem, NgbNavLinkBase} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, RouterOutlet, RouterLink],
+  imports: [RouterOutlet, CommonModule, RouterOutlet, RouterLink, NgbNav, NgbNavLinkBase, NgbNavItem],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -16,7 +17,7 @@ export class AppComponent implements OnInit {
   loggedIn = false;
   cookieValue: string = '';
   title = 'SlotMachineFrontEnd';
-  constructor(private cookieService: AppCookieService) { }
+  constructor(private cookieService: AppCookieService, public route: ActivatedRoute) { }
   ngOnInit() {
     this.getCookie();
     this.cookieService.authState$.subscribe(authState => {
