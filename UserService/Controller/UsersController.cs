@@ -12,7 +12,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 
-[Route("User")]
+[Route("user")]
 [ApiController]
 public class UsersController : ControllerBase
 {
@@ -72,7 +72,7 @@ public class UsersController : ControllerBase
     }
 
     [Authorize(Roles = "ADMIN")]
-    [HttpPost("Admin")]
+    [HttpPost("admin")]
     public async Task<IActionResult> CreateAdmin([FromBody] UserDTO userDTO)
     {
         try
@@ -94,7 +94,7 @@ public class UsersController : ControllerBase
 
             User user = _mapper.Map<User>(userDTO);
             user.Password = hashPass(user.Password);
-            user.Role = "Admin";
+            user.Role = "ADMIN";
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();

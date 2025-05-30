@@ -10,7 +10,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Text.Json;
 
 
@@ -20,7 +19,7 @@ public class GameController : ControllerBase
 {
     [Authorize]
     [HttpGet]
-    public async Task<IActionResult> PlayRound([FromHeader] String authorization)
+    public async Task<IActionResult> PlayRound([FromQuery(Name = "lobby")] String lobby, [FromHeader] String authorization)
     {
         
         authorization = authorization.Substring(7);
@@ -38,6 +37,7 @@ public class GameController : ControllerBase
 
         String[] results = Slots.Pull(ref bet);
 
+        int currBalance = 0;
         using (var client = new HttpClient())
         {
             client.DefaultRequestHeaders.Authorization =
@@ -46,15 +46,13 @@ public class GameController : ControllerBase
             var response = await client.GetAsync($"http://LobbyServiceAPI:8080/lobby/{userId}/money");
             var responseBodyString = await response.Content.ReadAsStringAsync();
 
-            var responseBodyJson = JsonDocument.Parse(responseBodyString);
+            currBalance = Int32.Parse(responseBodyString.Split(' ')[2].Substring(10, 13));
 
-            int currBalance = responseBodyJson.RootElement.GetProperty("money").GetInt32() + bet;
-            Console.WriteLine(currBalance);
+            currBalance = body.money + bet;
 
-            using StringContent patchContent = new(JsonSerializer.Serialize(new { new_balance = currBalance }), Encoding.UTF8, "application/json");
-            Console.WriteLine("HIT", patchContent.ToString());
-            var PatchResponse = await client.PatchAsync($"http://LobbyServiceAPI:8080/lobby/{userId}", patchContent);
-            var patchResponseString = await response.Content.ReadAsStringAsync();
+            var patchContext = new(JsonSerializer.Serialize(new { new_balance = currBalance}, Encoding.UTF8, "application/json"));
+        
+            var response = await client.PatchAsync($"http://LobbyServiceAPI:8080/lobby/{userId}", patchContext);
         }
         return StatusCode(200, results);
 

@@ -3,16 +3,16 @@ namespace AuthService;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 
 
-[Route("Auth")]
+[Route("auth")]
 [ApiController]
 public class AuthController : ControllerBase
 {

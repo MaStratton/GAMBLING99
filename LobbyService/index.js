@@ -21,6 +21,7 @@ function auth(req, res, next) {
     }
 
     try {
+        var token = req.headers.authorization.split(' ')[1];
         const decoded = jwt.verify(token, process.env.JWT_KEY);
         req.userId = decoded.userId;
         next();
@@ -36,6 +37,7 @@ function admin_auth(req, res, next) {
     }
 
     try {
+        var token = req.headers.authorization.split(' ')[1];
         const decoded = jwt.verify(token, process.env.JWT_KEY);
         req.userId = decoded.userId;
         if (decoded.role != "ADMIN") {
@@ -158,7 +160,7 @@ app.patch('/lobby/:user_id', auth, async (req, res) => {
 // GET /lobby/:user_id/money
 app.get('/lobby/:user_id/money', auth, async (req, res) => {
     const { user_id } = req.params;
-    const data = await getUserMoney(user_id);
+    const data = await getUserMoney(user_id.toString());
     if (!data) return res.status(404).json({ error: 'User not in a lobby' });
     res.json(data);
 });

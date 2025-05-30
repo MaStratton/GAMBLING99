@@ -58,8 +58,6 @@ private static String[] ReelThree = new String[]
 
     public static String[] Pull(ref int bet)
     {
-        //TODO Get LobbyService/userId/lobbyId to get user balance
-        int balance = 100;
         String[] result = Spin();
         if (result[0].Equals(result[1]) && result[1].Equals(result[2]))
         {
@@ -87,6 +85,10 @@ private static String[] ReelThree = new String[]
                     bet *= 5;
                     break;
             }
+        }
+        else
+        {
+            bet = bet * -1;
         }
         
         return result;
