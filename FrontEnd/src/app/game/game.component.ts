@@ -10,7 +10,7 @@ type slotTuple = readonly [string, string];
   imports: [CommonModule],
   template: `
     <h1>Time to Gamble!</h1>
-    <section class="slotMachine">
+    <section class="slot-machine">
       <div class="wheel" *ngFor="let wheel of wheels; let i = index">
         <img
             *ngIf="currentImages[i][0]"
@@ -32,7 +32,7 @@ type slotTuple = readonly [string, string];
       </div>
     </section>
   `,
-  styles: []
+  styleUrls: ['./game.component.css']
 })
 
 export class GameComponent implements OnInit {
