@@ -38,7 +38,7 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: "allowAngualrOrigin", policy => { policy.WithOrigins("http://loclahost:4200"); }); 
+    options.AddPolicy(name: "allowAngualrOrigin", policy => { policy.WithOrigins("http://localahost:4200"); }); 
 });
 
 var app = builder.Build();
