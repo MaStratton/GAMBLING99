@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,11 @@ builder.Services.AddAuthentication(options =>
     };
 });
 builder.Services.AddAuthorization();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "allowAngualrOrigin", policy => { policy.WithOrigins("http://loclahost:4200"); }); 
+});
 
 var app = builder.Build();
 
