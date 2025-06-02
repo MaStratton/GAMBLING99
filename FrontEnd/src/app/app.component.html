@@ -13,7 +13,7 @@
           <a *ngIf="!loggedIn" [routerLink]="['/signup']" class="text-white me-1" ngbNavLink>Sign Up</a>
         </ng-container>
         <ng-container ngbNavItem>
-          <a *ngIf="loggedIn" (click)="logOut()" [routerLink]="['/']" class="text-white" ngbNavLink>Log Out</a>
+          <a *ngIf="loggedIn" (click)="logOut()" [routerLink]="['/']" class="text-white me-1" ngbNavLink>Log Out</a>
         </ng-container>
         <ng-container ngbNavItem>
           <a *ngIf="loggedIn" [routerLink]="['/lobbies']" class="text-white" ngbNavLink>Find a Lobby</a>
