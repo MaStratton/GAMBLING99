@@ -58,6 +58,17 @@ services:
     networks:
       - gambling99
 
+  email-service:
+    image: emailservice:latest
+    container_name: EmailServiceAPI
+    hostname: EmailServiceAPI
+    build:
+      context: ./EmailService
+    ports:
+      - 3000:3000
+    networks:
+      - gambling99
+
   nginx:
     image: nginx:alpine
     container_name: NginX
