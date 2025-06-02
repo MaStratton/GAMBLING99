@@ -42,21 +42,22 @@ export class GameComponent implements OnInit {
   cookieValue: string = '';
   leaderboard: any = [];
 
-  slotImages:slotTuple[] = [['FrontEnd/src/Images/cherry.png','Bar'],
-    ['FrontEnd/src/Images/lemon.png', 'Lemon'],
-    ['FrontEnd/src/Images/orange.png', 'Orange'],
-    ['FrontEnd/src/Images/plum.png', 'Plum'],
-    ['FrontEnd/src/Images/bell.png', 'Bell'],
-    ['FrontEnd/src/Images/BAR.png', 'Bar'],
-    ['FrontEnd/src/Images/unicorn7.png', 'Seven'],
-    ['FrontEnd/src/Images/grapes.png', 'Grape'],
-    ['FrontEnd/src/Images/melon.png', 'Melon'],
-    ['FrontEnd/src/Images/star.png', 'Star'],
-    ['FrontEnd/src/Images/diamond.png', 'Diamond'],
-    ['FrontEnd/src/Images/penguin.png', 'Penguin'],
-    ['FrontEnd/src/Images/clover.png', 'Clover'],
-    ['FrontEnd/src/Images/Heart.png', 'Heart'],
-    ['FrontEnd/src/Images/skull.png', 'Skull']
+  slotImages:slotTuple[] = [
+    ['../../images/lemon.png', 'Lemon'],
+    ['../../images/orange.png', 'Orange'],
+    ['../../images/plum.png', 'Plum'],
+    ['../../images/bell.png', 'Bell'],
+    ['../../images/BAR.png', 'Bar'],
+    ['../../images/unicorn7.png', 'Seven'],
+    ['../../images/grapes.png', 'Grape'],
+    ['../../images/melon.png', 'Melon'],
+    ['../../images/star.png', 'Star'],
+    ['../../images/diamond.png', 'Diamond'],
+    ['../../images/penguin.png', 'Penguin'],
+    ['../../images/clover.png', 'Clover'],
+    ['../../images/Heart.png', 'Heart'],
+    ['../../images/cherry.png', 'Cherry'],
+    ['../../images/skull.png', 'Skull']
   ];
 
   wheels = [0, 1, 2];
