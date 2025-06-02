@@ -5,7 +5,7 @@ import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-lobby',
-  imports: [CommonModule, NgOptimizedImage],
+  imports: [CommonModule],
   template: `
     <div class="form-control-lg bg-black bg-opacity-25 m-1 p-3">
       <p>Lobby ID: {{ lobby }}</p>
@@ -46,7 +46,7 @@ export class LobbyComponent implements OnInit {
   }
 
   async getLobbyInfo() {
-    await fetch(`http://localhost:8084/lobby/${this.lobby}/leaderboard`, {
+    await fetch(`http://localhost:8080/lobby/${this.lobby}/leaderboard`, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -69,7 +69,7 @@ export class LobbyComponent implements OnInit {
       "initial_money": 5000
     }
     console.log(request);
-    await fetch('http://localhost:8084/lobby/join', {
+    await fetch('http://localhost:8080/lobby/join', {
       body: JSON.stringify(request),
       headers: {
         'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ export class LobbyComponent implements OnInit {
     const request = {
       "user_id": this.userId
     }
-    await fetch(`http://localhost:8084/lobby/leave`, {
+    await fetch(`http://localhost:8080/lobby/leave`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.cookieValue}`,

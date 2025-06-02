@@ -10,7 +10,7 @@ import {Router} from '@angular/router';
     <section class="container justify-content-center align-items-center min-vh-100" style="width:100%; max-width: 400px;">
       <form class="form-control-sm mt-5 bg-gradient">
           <h3>Please enter the following to sign up</h3>
-          <p id="message"></p>
+          <p id="message" class="text-danger"></p>
         <div class="mb-2">
           <label for="InputUsername">Username</label> <br>
           <input type="text" class="form-control" placeholder="Username" #username/> <br>
@@ -24,11 +24,10 @@ import {Router} from '@angular/router';
           <input type="password" class="form-control" placeholder="Password" #password/> <br>
         </div>
         <div class="form-group form-check mb-2">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1">
+          <input type="checkbox" class="form-check-input" id="exampleCheck1" #termsOfService>
           <label class="form-check-label" for="exampleCheck1">Agree to our terms of service</label>
         </div>
-
-        <button class="btn btn-primary mb2 w-100" type="button" (click)="attemptSignup(username.value, email.value, password.value)">Sign up</button>
+        <button class="btn btn-primary mb2 w-100" type="button" (click)="attemptSignup(username.value, email.value, password.value, termsOfService.checked)">Sign up</button>
       </form>
     </section>
   `,
@@ -38,14 +37,14 @@ import {Router} from '@angular/router';
 export class SignUpComponent {
   title = 'Sign Up';
   constructor(private router: Router) {}
-  async attemptSignup(username: string, email: string, password: string){
-    if(username != null && email != null && password != null){
+  async attemptSignup(username: string, email: string, password: string, acceptedTOS: boolean) {
+    if(username != null && email != null && password != null && acceptedTOS){
       const request = {
         "Username": username,
         "Email": email,
         "Password": password
       }
-      await fetch('http://localhost:8081/user', {
+      await fetch('http://localhost:8080/user', {
         body: JSON.stringify(request),
         headers: {
           'Content-Type': 'application/json',
@@ -67,6 +66,12 @@ export class SignUpComponent {
           this.router.navigate(['/login']);
         }
       })
+    }
+    const element = document.getElementById('message');
+    if(!acceptedTOS){
+      if(element) element.textContent = "Please accept the terms of service";
+    } else {
+      if (element) element.textContent = "Please fill out all forms";
     }
   }
 }

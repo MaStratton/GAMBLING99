@@ -10,11 +10,7 @@ import { Router } from "@angular/router";
     <section class="container justify-content-center align-items-center min-vh-100" style="width:100%; max-width: 400px;">
       <form class="form-control-sm mt-5 bg-gradient">
         <h2>Please sign in</h2>
-        <p id="message"></p>
-        <div class="form-group mb-2">
-          <label>Username</label> <br>
-          <input type="text" class="form-control" placeholder="Username" #username/> <br>
-        </div>
+        <p id="message" class="text-danger"></p>
         <div class="form-group mb-2">
           <label>Email</label> <br>
           <input type="email" class="form-control" placeholder="Email" #email/> <br>
@@ -23,7 +19,7 @@ import { Router } from "@angular/router";
           <label>Password</label> <br>
           <input type="password" class="form-control mb-2" placeholder="Password" #password/> <br>
         </div>
-        <button class="btn btn-primary mb2 w-100" type="button" (click)="attemptLogin(username.value, email.value, password.value)">Login</button>
+        <button class="btn btn-primary mb2 w-100" type="button" (click)="attemptLogin(email.value, password.value)">Login</button>
       </form>
     </section>
   `,
@@ -34,14 +30,13 @@ export class LoginComponent {
   title = 'Login';
   constructor(private cookieService: AppCookieService, private router: Router) { }
 
-  async attemptLogin(username: string, email: string, password: string) {
-    if(username != null && email != null && password != null){
+  async attemptLogin(email: string, password: string) {
+    if(email != null && password != null){
       const request = {
-        "Username": username,
         "Email": email,
         "Password": password
       }
-      await fetch('http://localhost:8082/auth', {
+      await fetch('http://localhost:8080/auth', {
         body: JSON.stringify(request),
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +53,6 @@ export class LoginComponent {
           }
           this.router.navigate(['/login']);
         }else {
-          console.log(r)
           this.cookieService.setCookie("user" , r);
           this.cookieService.updateAuthState();
           this.router.navigate(['/']);

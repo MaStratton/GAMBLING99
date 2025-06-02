@@ -23,7 +23,7 @@ export const routes: Routes = [
     title: 'Sign Up',
   },
   {
-    path: 'game',
+    path: 'game/:id',
     component: GameComponent,
     title: 'Game',
   },
