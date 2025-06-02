@@ -7,7 +7,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -48,12 +47,13 @@ public class GameController : ControllerBase
 
             var responseBodyJson = JsonDocument.Parse(responseBodyString);
 
+
             int currBalance = responseBodyJson.RootElement.GetProperty("money").GetInt32() + bet;
-            Console.WriteLine(currBalance);
 
             using StringContent patchContent = new(JsonSerializer.Serialize(new { new_balance = currBalance }), Encoding.UTF8, "application/json");
-            Console.WriteLine("HIT", patchContent.ToString());
+
             var PatchResponse = await client.PatchAsync($"http://LobbyServiceAPI:8080/lobby/{userId}", patchContent);
+
             var patchResponseString = await response.Content.ReadAsStringAsync();
         }
         return StatusCode(200, results);

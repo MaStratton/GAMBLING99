@@ -59,6 +59,7 @@ services:
       - gambling99
 
   nginx:
+    image: nginx:alpine
     container_name: NginX
     hostname: NginX
     build: ./NginX

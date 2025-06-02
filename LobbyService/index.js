@@ -40,7 +40,7 @@ function admin_auth(req, res, next) {
         const token = req.headers.authorization.split(" ")[1];
         const decoded = jwt.verify(token, process.env.JWT_KEY);
         req.userId = decoded.userId;
-        if (decoded.role === "ADMIN") {
+        if (decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] === "ADMIN") {
             next();
         } else {
             res.status(401).json({ error: 'Admin only' });
