@@ -40,6 +40,7 @@ export class GameComponent implements OnInit {
       this.id = params['id'];
     })
     await this.updateLeaderboard()
+    await this.updateMoney()
   }
 
   async updateLeaderboard(){
@@ -72,13 +73,35 @@ export class GameComponent implements OnInit {
     }).then(r => {
       if (r != undefined) {
         console.log(r);
-        let element = document.getElementById('');
+        let element = document.getElementById('response');
         if(element) {
-          element.textContent = "Invalid login credentials."
+          element.textContent = `${r}`
         }
       }
     })
-    this.updateLeaderboard()
+    await this.updateLeaderboard()
+    await this.updateMoney()
+  }
+
+  async updateMoney(){
+    await fetch(`http://localhost:8080/lobby/${this.userId}/money`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.cookieValue
+      },
+      method: 'GET'
+    }).then(r => {
+      if (r.ok) {return r.json()}
+      else return null;
+    }).then(r => {
+      if (r != undefined) {
+        console.log(r);
+        let element = document.getElementById('money');
+        if(element) {
+          element.textContent = `Current Balance: \$${r.money}`
+        }
+      }
+    })
   }
 
   parseJwt(token : string) {

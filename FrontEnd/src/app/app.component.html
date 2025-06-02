@@ -16,9 +16,6 @@
           <a *ngIf="loggedIn" (click)="logOut()" [routerLink]="['/']" class="text-white" ngbNavLink>Log Out</a>
         </ng-container>
         <ng-container ngbNavItem>
-          <a *ngIf="loggedIn" [routerLink]="['/game']" class="text-white" ngbNavLink>Game (Temp link)</a>
-        </ng-container>
-        <ng-container ngbNavItem>
           <a *ngIf="loggedIn" [routerLink]="['/lobbies']" class="text-white" ngbNavLink>Find a Lobby</a>
         </ng-container>
       </nav>
