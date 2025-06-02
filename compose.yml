@@ -44,7 +44,6 @@ services:
     networks:
       - gambling99
 
-
   lobby-service:
     image: lobbyservice:latest
     container_name: LobbyServiceAPI
@@ -59,17 +58,17 @@ services:
     networks:
       - gambling99
 
-
   nginx:
     container_name: NginX
-    ports:
-      - 8080:8080
+    hostname: NginX
+    build: ./NginX
     depends_on:
       - auth-service
       - game-service
       - lobby-service
       - user-service
-    build: ./NginX
+    ports:
+      - 8080:8080
     networks:
       - gambling99
 
