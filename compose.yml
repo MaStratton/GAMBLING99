@@ -44,7 +44,6 @@ services:
     networks:
       - gambling99
 
-
   lobby-service:
     image: lobbyservice:latest
     container_name: LobbyServiceAPI
@@ -59,17 +58,29 @@ services:
     networks:
       - gambling99
 
+  email-service:
+    image: emailservice:latest
+    container_name: EmailServiceAPI
+    hostname: EmailServiceAPI
+    build:
+      context: ./EmailService
+    ports:
+      - 3000:3000
+    networks:
+      - gambling99
 
   nginx:
+    image: nginx:alpine
     container_name: NginX
-    ports:
-      - 8080:8080
+    hostname: NginX
+    build: ./NginX
     depends_on:
       - auth-service
       - game-service
       - lobby-service
       - user-service
-    build: ./NginX
+    ports:
+      - 8080:8080
     networks:
       - gambling99
 
