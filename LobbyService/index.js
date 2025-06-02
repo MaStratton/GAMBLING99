@@ -2,11 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const redis = require('redis');
 const jwt = require('jsonwebtoken')
+const cors = require('cors');
 
 const app = express();
 const PORT = 8080;
 
 app.use(bodyParser.json());
+
+app.use(cors({}));
 
 const client = redis.createClient({
     url: 'redis://redis:6379'
@@ -39,8 +42,9 @@ function admin_auth(req, res, next) {
     try {
         const token = req.headers.authorization.split(" ")[1];
         const decoded = jwt.verify(token, process.env.JWT_KEY);
+        console.log("Role: " + decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"])
         req.userId = decoded.userId;
-        if (decoded.role === "ADMIN") {
+        if (decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] === "ADMIN") {
             next();
         } else {
             res.status(401).json({ error: 'Admin only' });
@@ -173,7 +177,7 @@ app.get('/lobby/:user_id/money', auth, async (req, res) => {
     const { user_id } = req.params;
     const data = await getUserMoney(user_id.toString());
     if (!data) return res.status(404).json({ error: 'User not in a lobby' });
-    res.json(data);
+    res.json(data); 
 });
 
 app.get('/lobby/home', (req, res) => {
