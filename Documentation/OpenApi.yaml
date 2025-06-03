@@ -5,12 +5,8 @@ info:
   description: Microservice API that runs a web based gambling royal game
 
 servers:
-  - url: http://UserServiceAPI:8080
-    description: Handles the users creation and functionality
-  - url: http://AuthServiceAPI:8080
-    description: Handles authentication and its functionality
-  - url: http://LobbyServiceAPI:8080
-    description: Handles the lobby creation and functionality
+  - url: http://LocalHost:8080/
+    description: nginx port allows access to all endpoints by adding /[endpoint] to the end
   - url: MySql://MySql:3306
     description: The server for the mysql database
   - url: redis://redis:6379
@@ -99,7 +95,7 @@ paths:
         '500':
           description: Server error
           
-  /User/home:
+  /user/home:
     get:
       tags: [User]
       summary: Gets house
@@ -117,7 +113,7 @@ paths:
           description: Server error
 
   # ------- Auth Service ------- #
-  /Auth:
+  /auth:
     post:
       tags: [Auth]
       summary: Takes in username, email and password, returns JWT token
@@ -145,7 +141,7 @@ paths:
         '500':
           description: Server error
 
-  /Auth/home:          
+  /auth/home:          
     get:
       tags: [Auth]
       summary: Gets house
@@ -163,7 +159,7 @@ paths:
           description: Server error
   
   # ------- Game service ------- #
-  /Game/home:
+  /game/home:
     get:
       tags: [Game]
       summary: Gets house
@@ -179,3 +175,186 @@ paths:
           description: House not found
         '500':
           description: Server error
+  /game:
+    get:
+      tags: [Game]
+      sumary: plays a round of the game
+      responses:
+        '200':
+          description: Succesfully spun slot machine
+          content:
+            application/json:
+              schema:
+                type: object
+                format: binary
+        '401':
+          description:
+            Bad JWT token
+          content:
+            applicatoin/json:
+              schema:
+                type: array
+                format: binary
+
+  # ------ Lobby Service ------ #
+  /lobby/home:
+    get:
+      tags: [Lobby]
+      summary: gets house
+      responses:
+        '200':
+          description: House
+          content:
+            'image/png':
+              schema:
+                type: object
+                format: binary
+        '404':
+          description: House not found
+        '500':
+          descritpion: Server error
+  /lobby:
+    get:
+      tags: [Lobby]
+      summary: gets all lobbies
+      responses:
+        '200':
+          description: returns all lobbies
+          content:
+            application/json:
+              schema:
+                type: array
+                format: binary
+  /lobby/:lobby_id/leaderboard:
+    get:
+      tags: [Lobby]
+      summary: gets lobby leaderboard by id
+      responses:
+        '200':
+          description:
+            returns lobby leaderboard by id
+          content:
+            application/json:
+              schema:
+                type: object
+                format: binary
+  /lobby/join:
+    post:
+      tags: [Lobby]
+      summary: posts user to a lobby
+      responses:
+        '200':
+          description: posts a user to a lobby
+          content:
+            application/json:
+              schema:
+                type: object
+                format: binary
+        '400':
+          description:  missing required fields or user is already in lobby
+          content:
+            application/json:
+              schema:
+                type: object
+                format: binary
+  /lobby/leave:
+    post:
+      tags: [Lobby]
+      summary: removes user from lobby
+      responses:
+        '200':
+          description: removes a user from the lobby
+          content:
+            application/json:
+              schema:
+                type: object
+                format: binary
+        '400':
+          description:  missing user id or user is not in lobby
+          content:
+            application/json:
+              schema:
+                type: object
+                format: binary
+        
+  /lobby/create:
+    post:
+      tags: [Lobby]
+      summary: creates a new lobby
+      responses: 
+        '200':
+          description: creates a new lobby
+          content:
+            application/json:
+              schema:
+                type: object
+                format: binary
+        '400':
+          description:  missing name or host
+          content:
+            application/json:
+              schema:
+                type: object
+                format: binary
+  /lobby/:id:
+    delete:
+      tags: [Lobby]
+      summary: Deletes a lobby by given id
+      responses:
+        '200':
+          description: deletes the given lobby
+          content:
+            application/json:
+              schema:
+                type: object
+                format: binary
+    patch:
+      tags: [Lobby]
+      summary: updates the user within a given lobby
+      responses:
+        '200':
+          description:
+            updates the user within a given lobby
+          content:
+            application/json:
+              schema:
+                type: object
+                format: binary
+        '400':
+          description:  missing name or host
+          content:
+            application/json:
+              schema:
+                type: object
+                format: binary
+        '404':
+          description: user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                format: binary
+  /lobby/:user_id/money:
+    get:
+      tags: [Lobby]
+      summary: gets the given users money
+      responses:
+        '200':
+          description:
+            gets the given users money
+          content:
+            application/json:
+              schema:
+                type: object
+                format: binary
+        '404':
+          description: user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                format: binary
+          
+
+    
+
