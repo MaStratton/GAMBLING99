@@ -17,9 +17,9 @@ using System.Text.RegularExpressions;
 public class UsersController : ControllerBase
 {
     private readonly UserServiceDBContext _dbContext;
-    
+
     private readonly IMapper _mapper;
-    
+
     private const String REGEX_STRING = "^((?!\\.)[\\w\\-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$";
 
     public UsersController(UserServiceDBContext dbContext, IMapper mapper)
@@ -61,20 +61,25 @@ public class UsersController : ControllerBase
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
 
-            return Ok(new { Success = true, Message = "User created."});
-            
-        } 
+            MessageQueue.SendEmail(user.Email, user.Username);
+
+            return Ok(new { Success = true, Message = "User created." });
+
+        }
         catch (Exception e)
         {
             Console.WriteLine(e);
             return StatusCode(500, "Internal Server Error");
         }
+        return NotFound();
     }
 
     [Authorize(Roles = "ADMIN")]
     [HttpPost("admin")]
     public async Task<IActionResult> CreateAdmin([FromBody] UserDTO userDTO)
     {
+
+
         try
         {
             if (!new Regex(REGEX_STRING).IsMatch(userDTO.Email))
@@ -99,6 +104,8 @@ public class UsersController : ControllerBase
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
 
+            MessageQueue.SendEmail(user.Email, user.Username);
+
             return Ok(new { Success = true, Message = "Admin created." });
 
         }
@@ -107,6 +114,8 @@ public class UsersController : ControllerBase
             Console.WriteLine(e + "\n");
             return StatusCode(500, "Internal Server Error");
         }
+
+
     }
 
     [HttpGet("home")]
@@ -125,8 +134,8 @@ public class UsersController : ControllerBase
         salt.CopyTo(saltedPass, passByte.Length);
         using (SHA512 shaM = SHA512.Create())
         {
-        byte[] hash = shaM.ComputeHash(saltedPass);
-        return BitConverter.ToString(hash).Replace("-", "").ToLower();    
+            byte[] hash = shaM.ComputeHash(saltedPass);
+            return BitConverter.ToString(hash).Replace("-", "").ToLower();
         }
     }
 }

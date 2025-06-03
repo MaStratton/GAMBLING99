@@ -60,8 +60,8 @@ services:
 
   email-service:
     image: emailservice:latest
-    container_name: EmailServiceAPI
-    hostname: EmailServiceAPI
+    container_name: EmailService
+    hostname: EmailService
     build:
       context: ./EmailService
     ports:

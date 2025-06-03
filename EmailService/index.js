@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 
 async function main() {
     const sock = new zmq.Pull();
-    await sock.bind('tcp://127.0.0.1:3000');
+    await sock.bind('tcp://*:3000');
     console.log('zeromq consumer bound to port 3000');
 
     const testAccount = await nodemailer.createTestAccount();

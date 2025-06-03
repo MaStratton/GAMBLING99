@@ -11,4 +11,6 @@ WORKDIR /App
 COPY --from=build /App/out .
 COPY --from=build /App/Properties ./Properties
 
+EXPOSE 3000
+
 ENTRYPOINT ["dotnet", "UserService.dll"]

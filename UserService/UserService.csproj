@@ -12,6 +12,7 @@
     <PackageReference Include="MySql.EntityFrameworkCore" Version="9.0.3" />
     <PackageReference Include="MySqlConnector" Version="2.4.0" />
     <PackageReference Include="MySqlConnector.DependencyInjection" Version="2.4.0" />
+    <PackageReference Include="NetMQ" Version="4.0.1.16" />
 
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.4" />
