@@ -115,8 +115,25 @@ public class UsersController : ControllerBase
             return StatusCode(500, "Internal Server Error");
         }
 
-
     }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetUsernameFromID([FromRoute(Name = "id")] int userId)
+    {
+        var dbUser = await _dbContext.Users.FirstAsync(u => u.UserId == userId);
+
+        if (dbUser == null)
+        {
+            return StatusCode(400, new { Status = "User Not Found" });
+        }
+
+        var user = _mapper.Map<User>(dbUser);
+
+        return Ok(new { Username = user.Username });
+        
+    }
+
+
 
     [HttpGet("home")]
     public async Task<IActionResult> GetHome()
