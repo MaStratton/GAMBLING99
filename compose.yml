@@ -73,7 +73,9 @@ services:
     image: nginx:alpine
     container_name: NginX
     hostname: NginX
-    build: ./NginX
+    build: 
+      context: .
+      dockerfile: ./NginX/Dockerfile
     depends_on:
       - auth-service
       - game-service
