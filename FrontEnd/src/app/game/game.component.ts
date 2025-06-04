@@ -9,30 +9,35 @@ type slotTuple = readonly [string, string];
   selector: 'app-game',
   imports: [CommonModule],
   template: `
-    <h1>Time to Gamble!</h1>
-    <section class="slot-machine">
-      <div class="wheel" *ngFor="let wheel of wheels; let i = index">
-        <img
-            *ngIf="currentImages[i][0]"
-            [src]="currentImages[i][0]"
-            [alt]="currentImages[i][1]"
-            [class.spinning]="isSpinning[i]"
-        />
-      </div>
-      <p id="response"></p>
-      <p id="money"></p>
-      <button (click)="spinSlotMachine()">Spin da wheel</button>
-    </section>
-    <section class="leaderboard">
-      <p>put a leaderboard somewhere over here
-      <div *ngIf="leaderboard != undefined">
-        <p
-          *ngFor="let player of leaderboard"
-        >{{player.position}}) {{player.user_id}} - \${{player.money}}</p>
-      </div>
-    </section>
+    <div class="text-center">
+      <h1>Time to Gamble!</h1>
+      <section class="">
+        <div class="d-flex justify-content-center gap-2 mt-4 mb-5">
+          <div class="wheel bg-white bg-opacity-25" *ngFor="let wheel of wheels; let i = index">
+            <img
+                *ngIf="currentImages[i][0]"
+                [src]="currentImages[i][0]"
+                [alt]="currentImages[i][1]"
+                [class.spinning]="isSpinning[i]"
+            />
+          </div>
+        </div>
+        <p id="money"></p>
+        <button (click)="spinSlotMachine()" class="btn btn-success w-25">Spin wheel</button>
+      </section>
+      <section class="container justify-content-center align-items-center min-vh-100" style="width:100%; max-width: 400px;">
+        <div class="bg-black bg-opacity-25 rounded-2 mt-5">
+          <p>Leaderboard:
+          <div *ngIf="leaderboard != undefined">
+            <p
+              *ngFor="let player of leaderboard"
+            >{{player.position}}) {{player.user_id}} - \${{player.money}}</p>
+          </div>
+        </div>
+      </section>
+    </div>
   `,
-  styleUrls: ['./game.component.css']
+  styleUrls: ['./game.component.css'],
 })
 
 export class GameComponent implements OnInit {
@@ -105,10 +110,6 @@ export class GameComponent implements OnInit {
     }).then(r => {
       if (r != undefined) {
         this.slotSpinAnimation(r[0], r[1], r[2]);
-        let element = document.getElementById('response');
-        if(element) {
-          element.textContent = `${r}`
-        }
       }
     })
     await this.updateLeaderboard()

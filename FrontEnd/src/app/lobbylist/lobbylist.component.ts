@@ -12,7 +12,7 @@ import {Router} from '@angular/router';
 
     <section class="lobbyList">
       <div class="text-center">
-        <h1>Something something blah blah</h1>
+        <h1>Please select a lobby below</h1>
         <p
           *ngIf="inLobby"
         >Please your lobby before joining another</p>
@@ -59,8 +59,6 @@ export class LobbyListComponent implements OnInit {
     this.userId = this.jwtPayload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]
     await this.getLobbyList()
     await this.checkLobbyStatus()
-    //console.log("jwtPayload", this.jwtPayload)
-    //console.log("Role", this.role)
   }
 
   async createLobby() {
@@ -69,7 +67,7 @@ export class LobbyListComponent implements OnInit {
       "name": "placeholder",
       "host": "placeholder"
     }
-    await fetch('http://localhost:8084/lobby/create', {
+    await fetch('http://localhost:8080/lobby/create', {
       body: JSON.stringify(request),
       method: 'POST',
       headers: {

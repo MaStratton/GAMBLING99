@@ -17,10 +17,15 @@ import {Router} from '@angular/router';
       >Join Lobby</button>
       <button
         (click)="leaveLobby()"
-        class="btn btn-danger"
+        class="btn btn-danger me-2"
         *ngIf="inLobby && lobbyUserIsIn == lobby"
         >Leave Lobby
       </button>
+      <button
+        (click)="rejoinLobby()"
+        class="btn btn-success"
+        *ngIf="inLobby && lobbyUserIsIn == lobby"
+        >Rejoin Game</button>
     </div>
   `,
   styles: []
@@ -80,10 +85,14 @@ export class LobbyComponent implements OnInit {
       if (r.ok) {return r.json()}
       else return null;
     }).then(r => {
-      //this.router.navigate(['/game'])
+      this.router.navigate([`/game/${this.lobby}`])
     })
     //TODO: Add notification of user already in lobby
     //Also update to send to correct game page.
+  }
+
+  rejoinLobby() {
+    this.router.navigate([`/game/${this.lobby}`])
   }
 
   async leaveLobby() {

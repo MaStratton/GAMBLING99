@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   loggedIn = false;
   cookieValue: string = '';
   title = 'SlotMachineFrontEnd';
-  constructor(private cookieService: AppCookieService, public route: ActivatedRoute) { }
+  constructor(private cookieService: AppCookieService, public route: ActivatedRoute, private router: Router) { }
   ngOnInit() {
     this.getCookie();
     this.cookieService.authState$.subscribe(authState => {
@@ -38,5 +38,9 @@ export class AppComponent implements OnInit {
   logOut() {
     this.deleteCookie();
     this.cookieService.updateAuthState()
+    let currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
+    })
   }
 }

@@ -6,8 +6,8 @@
 }
 
 .wheel {
-    width: 100px;
-    height: 100px;
+    width: 300px;
+    height: 300px;
     overflow: hidden;
     border: 2px solid #444;
     border-radius: 8px;
@@ -18,8 +18,8 @@
 }
 
 img {
-    width: 80px;
-    height: 80px;
+    width: 280px;
+    height: 280px;
     transition: transform 0.2s ease-in-out;
 }
 

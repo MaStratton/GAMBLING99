@@ -55,14 +55,12 @@ export class SignUpComponent {
         else return null;
       }).then(r => {
         if(r == null){
-          console.log("signup redirect");
           const element = document.getElementById('message');
           if(element) {
             element.textContent = "Please check your email address and username";
           }
           this.router.navigate(['/signup']);
         }else {
-          console.log("login redirect");
           this.router.navigate(['/login']);
         }
       })
