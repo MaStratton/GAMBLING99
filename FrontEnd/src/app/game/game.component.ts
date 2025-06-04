@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AppCookieService} from '../cookie.service';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
+import {waitForAsync} from '@angular/core/testing';
 
 type slotTuple = readonly [string, string];
 
@@ -76,8 +77,14 @@ export class GameComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.id = params['id'];
     })
-    await this.updateLeaderboard()
+    await this.displayLeaderboard()
+
     await this.updateMoney()
+  }
+
+  async displayLeaderboard() {
+    await this.updateLeaderboard()
+    await this.editLeaderboard()
   }
 
   async updateLeaderboard(){
@@ -95,6 +102,12 @@ export class GameComponent implements OnInit {
         this.leaderboard = r;
       }
     })
+  }
+
+  async editLeaderboard() {
+    for (let player of this.leaderboard) {
+      player.user_id = await this.userIdToUsername(player.user_id);
+    }
   }
 
   async spinSlotMachine() {
@@ -128,13 +141,35 @@ export class GameComponent implements OnInit {
       else return null;
     }).then(r => {
       if (r != undefined) {
-        console.log(r);
         let element = document.getElementById('money');
         if(element) {
           element.textContent = `Current Balance: \$${r.money}`
         }
       }
     })
+  }
+
+  leaderBoardInterval = setInterval(() => {
+    //this.updateLeaderboard()
+  }, 1000)
+
+  async userIdToUsername(userid: string): Promise<string> {
+    let username = "";
+    await fetch(`http://localhost:8080/user/${userid}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.cookieValue
+      },
+      method: 'GET'
+    }).then(r => {
+      if (r.ok) {return r.json()}
+      else return null;
+    }).then(r => {
+      if (r != undefined) {
+        username = r.username;
+      }
+    })
+    return username;
   }
 
   parseJwt(token : string) {
@@ -177,4 +212,6 @@ export class GameComponent implements OnInit {
     // if not
     // remove the image with an animation and continue on
   }
-  }
+
+  protected readonly waitForAsync = waitForAsync;
+}
