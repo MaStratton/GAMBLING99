@@ -49,21 +49,21 @@ export class GameComponent implements OnInit {
   leaderboard: any = [];
 
   slotImages:slotTuple[] = [
-    ['../../images/lemon.png', 'Lemon'],
-    ['../../images/orange.png', 'Orange'],
-    ['../../images/plum.png', 'Plum'],
-    ['../../images/bell.png', 'Bell'],
-    ['../../images/BAR.png', 'Bar'],
-    ['../../images/unicorn7.png', 'Seven'],
-    ['../../images/grapes.png', 'Grape'],
-    ['../../images/melon.png', 'Melon'],
-    ['../../images/star.png', 'Star'],
-    ['../../images/diamond.png', 'Diamond'],
-    ['../../images/penguin.png', 'Penguin'],
-    ['../../images/clover.png', 'Clover'],
-    ['../../images/Heart.png', 'Heart'],
-    ['../../images/cherry.png', 'Cherry'],
-    ['../../images/skull.png', 'Skull']
+    ['./images/lemon.png', 'Lemon'],
+    ['./images/orange.png', 'Orange'],
+    ['./images/plum.png', 'Plum'],
+    ['./images/bell.png', 'Bell'],
+    ['./images/BAR.png', 'Bar'],
+    ['./images/unicorn7.png', 'Seven'],
+    ['./images/grapes.png', 'Grape'],
+    ['./images/melon.png', 'Melon'],
+    ['./images/star.png', 'Star'],
+    ['./images/diamond.png', 'Diamond'],
+    ['./images/penguin.png', 'Penguin'],
+    ['./images/clover.png', 'Clover'],
+    ['./images/Heart.png', 'Heart'],
+    ['./images/cherry.png', 'Cherry'],
+    ['./images/skull.png', 'Skull']
   ];
 
   wheels = [0, 1, 2];
