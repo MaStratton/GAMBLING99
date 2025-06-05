@@ -26,6 +26,17 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddCors(options =>
 {
+    options.AddPolicy("AllowNginx", policy =>
+    {
+        policy.WithOrigins("http://localhost:8080")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowAnyOrigin();
+    });
+});
+
+builder.Services.AddCors(options =>
+{
     options.AddPolicy("AllowFrontEnd", policy =>
     {
         policy.WithOrigins("http://localhost:4200")
@@ -61,7 +72,7 @@ builder.Services.AddAuthorization();
 var app = builder.Build();
 
 app.UseCors("AllowFrontEnd");
-
+app.UseCors("AllowNginX");
 //app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 app.MapControllers();
